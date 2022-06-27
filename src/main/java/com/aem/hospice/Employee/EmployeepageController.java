@@ -20,8 +20,32 @@ public class EmployeepageController {
 
     public void employee(ActionEvent actionEvent)throws IOException {
         try{
-            EOverviewController over=new EOverviewController();
-            over.eoverview(actionEvent);
+
+            if(employee.getType()==1){
+                DoctorOverviewController dover = new DoctorOverviewController();
+                dover.doctoroverview(actionEvent);
+            }
+            else if(employee.getType()==2){
+                NurseOverviewController temp = new NurseOverviewController();
+                temp.nurseoverview(actionEvent);
+            }
+            else if(employee.getType()==3){
+                LabAssistantOverviewController temp = new LabAssistantOverviewController();
+                temp.labassistantoverview(actionEvent);
+            }
+            else if(employee.getType()==4){
+                PharmacistOverviewController temp = new PharmacistOverviewController();
+                temp.pharmacistoverview(actionEvent);
+            }
+            else if(employee.getType()==5){
+                CleanerOverviewController temp = new CleanerOverviewController();
+                temp.CleanerOverview(actionEvent);
+            }
+
+            else{
+                EOverviewController over=new EOverviewController();
+                over.eoverview(actionEvent);
+            }
         }
         catch(Exception e){
             System.out.println(e.getMessage());
@@ -58,8 +82,7 @@ public class EmployeepageController {
     @FXML
     void OverviewButton(ActionEvent actionEvent) {
         try{
-            EOverviewController over=new EOverviewController();
-            over.eoverview(actionEvent);
+            employee(actionEvent);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -68,14 +91,14 @@ public class EmployeepageController {
     }
 
     @FXML
-    void employee_b(ActionEvent event) {
+    void employee_b(ActionEvent event) throws IOException {
          EEmployeeController eep = new EEmployeeController();
          eep.eemployee(event);
 
     }
 
     @FXML
-    void patient_b(ActionEvent event) {
+    void patient_b(ActionEvent event) throws IOException {
          EPatientController epa = new EPatientController();
          epa.epatient(event);
 

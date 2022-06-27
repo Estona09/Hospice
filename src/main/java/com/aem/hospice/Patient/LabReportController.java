@@ -56,14 +56,14 @@ public class LabReportController extends PatientpageController implements Initia
 
     @FXML
     private Label total_expanse;
-    private ObservableList<ProvidedService> list = FXCollections.observableArrayList();
+    private final ObservableList<ProvidedService> list = FXCollections.observableArrayList();
 
     public void labreport(ActionEvent actionEvent)throws IOException {
         try{
             FXMLLoader loader=new FXMLLoader(getClass().getResource("LabReport.fxml"));
             Parent root=loader.load();
             Stage stage=(Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
-            stage.setTitle("Hospice Patient Lab Report & Bill");
+            stage.setTitle("Hospice Patient Lab Report");
             Scene scene=new Scene(root);
             stage.setScene(scene);
             stage.show();
@@ -98,7 +98,7 @@ public class LabReportController extends PatientpageController implements Initia
         total_expanse.setText(""+e);
         paid.setText(""+p);
         due.setText(""+d);
-        col_ntest.setCellValueFactory(new PropertyValueFactory<>("s_type"));
+        col_ntest.setCellValueFactory(new PropertyValueFactory<>("s_name"));
         col_expanse.setCellValueFactory(new PropertyValueFactory<>("bill"));
         col_quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         col_pstatus.setCellValueFactory(new PropertyValueFactory<>("payment_status"));

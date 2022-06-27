@@ -1,10 +1,12 @@
 package com.aem.hospice.Classes;
 
+import com.aem.hospice.PopUp.AlertBox;
+
 import java.sql.*;
 
 import static com.aem.hospice.Classes.DBLogInManagerMySQL.GenerateUid;
 
-public class Employee {
+public class Employee implements RealEntity{
     private String uid=" ";
     private String name= " ";
     private int type;
@@ -12,137 +14,72 @@ public class Employee {
     private int age;
     private String mail=" ";
     private double MonthlySalary=0;
-    private Connection conn;
-    private Statement mysta;
-    private void databaseupdate() throws SQLException {
-        conn = DBLogInManagerMySQL.MakeConnection();
-        if(conn==null) {System.out.println("NULL");}
-        mysta = conn.createStatement();
-        PreparedStatement pstmt = null;
-        String query = "UPDATE employee set uid=?, name=?, type=?,gender=?,age=?,mail=?,MonthlySalary=? WHERE uid =? ;";
-        try {
-            pstmt = getPreparedStatement(query);
-            pstmt.setString(8, uid);
-            int status = pstmt.executeUpdate();
-            if(status > 0) {
-                System.out.println("Record is inserted successfully !!!");
-            }
-        } catch(Exception e){
-            e.printStackTrace();
-        }
+    private final ClassDBConnector DBConnection;
 
-    }
 
-    private PreparedStatement getPreparedStatement(String query) throws SQLException {
-        PreparedStatement pstmt;
-        pstmt = conn.prepareStatement(query);
-        pstmt.setString(1, uid);
-        pstmt.setString(2, name);
-        pstmt.setInt(3, type);
-        pstmt.setString(4, gender);
-        pstmt.setInt(5, age);
-        pstmt.setString(6, mail);
-        pstmt.setDouble(7, MonthlySalary);
-        return pstmt;
-    }
-    private void databaseinp() throws SQLException {
-        conn = DBLogInManagerMySQL.MakeConnection();
-        if(conn==null) {System.out.println("NULL");}
-        mysta = conn.createStatement();
-        PreparedStatement pstmt = null;
-        String query = "INSERT INTO employee(uid, name, type,gender,age,mail,MonthlySalary)" + "VALUES (?, ?, ?,?, ?, ?,?)";
-        try {
-            pstmt = getPreparedStatement(query);
-            int status = pstmt.executeUpdate();
-            if(status > 0) {
-                System.out.println("Record is inserted successfully !!!");
-            }
-        } catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-    Employee(String name, int type, String gender, int age, String mail, double monthlySalary) throws SQLException {
+    public Employee(String name, int type, String gender, int age, String mail, double monthlySalary){
+        DBConnection = new EmployeeDBConnectorMySQL();
         this.name = name;
         this.type = type;
         this.gender = gender;
         this.age = age;
         this.mail = mail;
         this.MonthlySalary = monthlySalary;
-        this.uid = DBLogInManagerMySQL.GenerateUid("employee","uid",1);
-        databaseinp();
+        this.uid = DBLogInManagerMySQL.GenerateUid("employee","uid",1,"a12345678A");
+        DBConnection.InsertIntoDatabase(this);
+        if(this.uid==null)
+            System.out.println("Employee ID Creation Failed");
     }
 
-    public Employee(String uid) throws SQLException {
-        Connection conn = DBLogInManagerMySQL.MakeConnection();
-        if(conn==null) {System.out.println("NULL");}
-        Statement mysta = conn.createStatement();
-        String sql = "Select * from hospice.employee where uid=\""+uid+"\";";
-        ResultSet rs = mysta.executeQuery(sql);
-        while(rs.next()){
-            this.uid =rs.getString("uid");
-            this.name = rs.getString("name");
-            this.type = rs.getInt("type");
-            this.gender = rs.getString("gender");
-            this.age = rs.getInt("age");
-            this.mail = rs.getString("mail");
-            this.MonthlySalary = rs.getDouble("MonthlySalary");
-
-        }
-    }
-
-    public static void main(String[] args) throws SQLException {
-        Employee e1 = new Employee("tahian",2,"male",32,"a@gmail.com",45000);
-
+    public Employee(String uid){
+        this.uid = uid;
+        DBConnection = new EmployeeDBConnectorMySQL();
+        DBConnection.InsertFromDatabase(this);
     }
 
     public String getUid() {
         return uid;
     }
 
-    public void setUid(String uid) throws SQLException {
+    public void setUid(String uid){
         this.uid = uid;
-
-        databaseupdate();
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) throws SQLException {
+    public void setName(String name) {
         this.name = name;
-
-        databaseupdate();
+        DBConnection.UpdateIntoDatabase(this);
     }
 
     public int getType() {
         return type;
     }
 
-    public void setType(int type) throws SQLException {
+    public void setType(int type){
         this.type = type;
-
-        databaseupdate();
+        DBConnection.UpdateIntoDatabase(this);
     }
 
     public String getGender() {
         return gender;
     }
 
-    public void setGender(String gender) throws SQLException {
+    public void setGender(String gender) {
         this.gender = gender;
-
-        databaseupdate();
+        DBConnection.UpdateIntoDatabase(this);
     }
 
-    public int getAge() throws SQLException {
+    public int getAge() {
         return age;
 
     }
 
-    public void setAge(int age) throws SQLException {
+    public void setAge(int age) {
         this.age = age;
-        databaseupdate();
+        DBConnection.UpdateIntoDatabase(this);
 
     }
 
@@ -150,9 +87,9 @@ public class Employee {
         return mail;
     }
 
-    public void setMail(String mail) throws SQLException {
+    public void setMail(String mail){
         this.mail = mail;
-        databaseupdate();
+        DBConnection.UpdateIntoDatabase(this);
 
     }
 
@@ -160,9 +97,9 @@ public class Employee {
         return MonthlySalary;
     }
 
-    public void setMonthlySalary(double monthlySalary) throws SQLException {
+    public void setMonthlySalary(double monthlySalary) {
         MonthlySalary = monthlySalary;
-        databaseupdate();
+        DBConnection.UpdateIntoDatabase(this);
 
     }
 }

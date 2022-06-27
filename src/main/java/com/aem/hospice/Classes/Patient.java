@@ -19,7 +19,7 @@ public class Patient implements RealEntity {
     private double LabExpanse=0;
     private double OtherExpanse =0;
     private double TotalBill=0;
-    private ClassDBConnector DBConnection;
+    private final ClassDBConnector DBConnection;
 
     public Patient(String name, String mail, String password) throws SQLException {
         DBConnection = new PatientDBConnectorMySQL();
@@ -27,13 +27,8 @@ public class Patient implements RealEntity {
         this.mail = mail;
         this.uid= GenerateUid("patient","uid",1,password);
         DBConnection.InsertIntoDatabase(this);
-        try{
-            AlertBox.display("Patient ID Creation Successfull","UID : "+ this.uid);
-        }catch (Exception e){
-            System.out.println("Patient ID Creation Successfull "+"\nUID : "+ this.uid);
-        }
-
-
+        if(this.uid==null)
+            System.out.println("Patient ID Creation Unsuccessfull ");
     }
     public Patient(String uid){
         this.uid = uid;

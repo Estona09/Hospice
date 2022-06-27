@@ -52,7 +52,7 @@ public class MedicineController extends PatientpageController implements Initial
     @FXML
     private Label total_expanse;
 
-    private ObservableList<ProvidedService> list = FXCollections.observableArrayList();
+    private final ObservableList<ProvidedService> list = FXCollections.observableArrayList();
 
     public void medicine(ActionEvent actionEvent) throws IOException {
         try {
@@ -60,7 +60,7 @@ public class MedicineController extends PatientpageController implements Initial
 
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setTitle("Hospice Patient Medicine & Bill");
+            stage.setTitle("Hospice Patient Medicine");
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
@@ -89,10 +89,11 @@ public class MedicineController extends PatientpageController implements Initial
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         calculateexpanse(1,"p_uid", patient1.getUid());
+        patient1.setPharmacyExpanse(e);
         total_expanse.setText(""+e);
         paid.setText(""+p);
         due.setText(""+d);
-        col_medname.setCellValueFactory(new PropertyValueFactory<>("s_uid"));
+        col_medname.setCellValueFactory(new PropertyValueFactory<>("s_name"));
         col_medexpase.setCellValueFactory(new PropertyValueFactory<>("bill"));
         col_medquantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         col_pstatus.setCellValueFactory(new PropertyValueFactory<>("payment_status"));

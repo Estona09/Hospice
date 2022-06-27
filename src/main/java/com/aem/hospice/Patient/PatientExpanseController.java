@@ -51,14 +51,14 @@ public class PatientExpanseController extends PatientpageController implements I
     @FXML
     private Label total_expanse;
     private double e=0,p=0,d=0;
-    private ObservableList<ProvidedService> list = FXCollections.observableArrayList();
+    private final ObservableList<ProvidedService> list = FXCollections.observableArrayList();
 
     public void patientexpanse(ActionEvent actionEvent) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Patient.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setTitle("Hospice");
+            stage.setTitle("Hospice Patient Total Expanse");
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
@@ -66,11 +66,11 @@ public class PatientExpanseController extends PatientpageController implements I
             System.out.println(e.getMessage());
         }
     }
-    public void calculateexpanse(String coln, String uid5){
+    public void calculateexpanse(String coln, String givenuid){
         try {
             Connection conn = DBLogInManagerMySQL.MakeConnection();
             Statement mysta = conn.createStatement();
-            String sql = "SELECT * from providedservice WHERE " + coln + "= '" + uid5 + "' ;";
+            String sql = "SELECT * from providedservice WHERE " + coln + "= '" + givenuid + "' ;";
             ResultSet rs = mysta.executeQuery(sql);
             while (rs.next()) {
                 e+= rs.getDouble("bill");
@@ -92,7 +92,7 @@ public class PatientExpanseController extends PatientpageController implements I
         total_expanse.setText(""+e);
         paid.setText(""+p);
         due.setText(""+d);
-        col_sname.setCellValueFactory(new PropertyValueFactory<>("s_type"));
+        col_sname.setCellValueFactory(new PropertyValueFactory<>("s_name"));
         col_sexpanse.setCellValueFactory(new PropertyValueFactory<>("bill"));
         col_squantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         col_pstatus.setCellValueFactory(new PropertyValueFactory<>("payment_status"));

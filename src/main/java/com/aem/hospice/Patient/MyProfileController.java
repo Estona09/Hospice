@@ -59,7 +59,7 @@ public class MyProfileController extends PatientpageController implements Initia
 
             Stage stage=(Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
 
-            stage.setTitle("Hospice");
+            stage.setTitle("Hospice Patient My Profile");
             Scene scene=new Scene(root);
             stage.setScene(scene);
             stage.show();
@@ -99,14 +99,18 @@ public class MyProfileController extends PatientpageController implements Initia
             patient1.setMail(tf_mail.getText());
             patient1.setMedicalhistory(tf_medicalhistory.getText());
             patient1.setGender(tf_gender.getText());
-//            if(pf_newpass.getText().equals(pf_newpass2.getText())){
-//                DBLogInManagerMySQL.ChangePassword(patient1.getUid(),pf_oldpass.getText(), pf_newpass.getText());
-//            }
-//            else{
-//                AlertBox.display("Password didn't matched", "Try Again");
-//            }
-//            MyProfileController myprofile = new MyProfileController();
-//            myprofile.myprofile(event);
+
+            if(!pf_oldpass.getText().isEmpty()){
+
+                if( pf_newpass.getText().equals(pf_newpass2.getText())){
+                    DBLogInManagerMySQL.ChangePassword(patient1.getUid(),pf_oldpass.getText(), pf_newpass.getText());
+                }
+                else{
+                    AlertBox.display("Password didn't matched", "Try Again");
+                }
+            }
+            MyProfileController myprofile = new MyProfileController();
+            myprofile.myprofile(event);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
